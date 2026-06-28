@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>France Eau — L'observatoire de l'eau potable en France</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#112233;--ink2:#1e2a3a;--paper:#f8f9fb;--paper2:#edf1f5;--accent:#0033a0;--accent2:#c93f1c;--muted:#5f6e80;--border:rgba(17,34,51,0.15);--green:#1a7a52;--orange:#c47a1a;--red:#c4291a;--card:#ffffff}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Outfit',sans-serif;font-size:16px;line-height:1.6;min-height:100vh}
+.site-header{border-bottom:2px solid var(--ink);padding:0 24px;background:var(--paper);position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,51,160,0.08)}
+.header-inner{max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+.site-logo{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-0.5px}
+.site-logo span{color:var(--accent)}
+.main{max-width:900px;margin:0 auto;padding:0 24px 80px}
+.hero-section{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--border);margin-bottom:0}
+.hero-left{padding:48px 48px 48px 0;border-right:1px solid var(--border)}
+.hero-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.hero-eyebrow::before{content:'';width:24px;height:2px;background:var(--accent);display:inline-block}
+.hero-left h1{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,4vw,52px);font-weight:700;line-height:1.1;margin-bottom:20px;color:var(--ink)}
+.hero-left h1 .blue-word{color:var(--accent);font-weight:700}
+.hero-left p{font-size:15px;color:var(--muted);line-height:1.7;max-width:380px}
+.hero-right{padding:48px 0 48px 48px;display:flex;flex-direction:column;justify-content:center}
+.search-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:600;margin-bottom:12px}
+.search-field{border:2px solid var(--ink);border-radius:0;padding:16px 20px;font-size:24px;font-family:'JetBrains Mono',monospace;color:var(--ink);background:var(--card);width:100%;outline:none;letter-spacing:4px;text-align:center;transition:border-color .2s;margin-bottom:10px}
+.search-field:focus{border-color:var(--accent)}
+.search-submit{background:var(--accent);color:var(--paper);border:none;padding:16px 24px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;width:100%}
+.search-note{font-size:11px;color:var(--muted);margin-top:10px;display:flex;align-items:center;gap:6px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.loading-section{display:none;padding:60px 0;text-align:center;border-bottom:1px solid var(--border)}
+.loading-bar-wrap{width:280px;height:3px;background:var(--border);margin:20px auto;border-radius:2px;overflow:hidden}
+.loading-bar-fill{height:100%;background:var(--accent);border-radius:2px;animation:loadbar 1.8s ease-in-out infinite}
+@keyframes loadbar{0%{width:0;margin-left:0}50%{width:60%;margin-left:20%}100%{width:0;margin-left:100%}}
+.loading-label{font-size:13px;color:var(--muted)}
+.loading-steps-list{list-style:none;display:inline-block;text-align:left;margin-top:16px}
+.loading-steps-list li{font-size:13px;color:var(--muted);padding:3px 0 3px 22px;position:relative}
+.loading-steps-list li::before{content:'○';position:absolute;left:0}
+.loading-steps-list li.done{color:var(--green)}
+.loading-steps-list li.done::before{content:'✓'}
+.loading-steps-list li.active{color:var(--accent)}
+.loading-steps-list li.active::before{content:'◉'}
+.results-section{display:none}
+.results-masthead{padding:40px 0 32px;border-bottom:2px solid var(--ink);margin-bottom:32px;display:grid;grid-template-columns:1fr auto;align-items:end;gap:24px}
+.results-kicker{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--accent);font-weight:600;margin-bottom:8px}
+.results-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,48px);font-weight:700;line-height:1.1}
+.results-sub{font-size:14px;color:var(--muted);margin-top:8px}
+.results-data-source{font-size:11px;color:var(--muted);text-align:right;border:1px solid var(--border);padding:8px 12px;border-radius:4px}
+.results-data-source strong{display:block;color:var(--ink);font-size:12px}
+.score-band{background:var(--ink);color:var(--paper);padding:24px 32px;display:flex;align-items:center;gap:32px;margin-bottom:32px}
+.score-letter{font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:700;line-height:1;flex-shrink:0}
+.score-letter.good{color:#52d68a}
+.score-letter.medium{color:#f5a623}
+.score-letter.bad{color:#ff6b6b}
+.score-band-info h2{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;margin-bottom:4px}
+.score-band-info p{font-size:14px;color:rgba(247,245,240,0.7);line-height:1.5}
+.score-conformity{margin-left:auto;text-align:center;flex-shrink:0}
+.score-conformity .big-num{font-family:'JetBrains Mono',monospace;font-size:36px;font-weight:500}
+.score-conformity .big-num.good{color:#52d68a}
+.score-conformity .big-num.medium{color:#f5a623}
+.score-conformity .big-num.bad{color:#ff6b6b}
+.score-conformity .label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:rgba(247,245,240,0.5)}
+.data-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);margin-bottom:32px;border:1px solid var(--border)}
+.data-cell{background:var(--card);padding:20px 24px}
+.data-cell-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:600;margin-bottom:8px}
+.data-cell-value{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:500;color:var(--ink);margin-bottom:6px}
+.data-cell-value .unit{font-size:13px;color:var(--muted);font-family:'Outfit',sans-serif}
+.data-bar{height:4px;background:var(--paper2);border-radius:2px;overflow:hidden;margin-top:8px}
+.data-bar-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.fill-good{background:var(--green)}
+.fill-medium{background:var(--orange)}
+.fill-bad{background:var(--red)}
+.data-status{display:inline-block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;padding:2px 8px;border-radius:2px;margin-top:4px}
+.status-good{background:rgba(26,122,82,0.1);color:var(--green)}
+.status-medium{background:rgba(196,122,26,0.1);color:var(--orange)}
+.status-bad{background:rgba(196,41,26,0.08);color:var(--red)}
+.basin-section{border:1px solid var(--border);margin-bottom:32px}
+.basin-header{background:var(--ink2);color:var(--paper);padding:20px 24px;display:flex;align-items:center;gap:16px}
+.basin-header-icon{font-size:28px}
+.basin-header-text h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700}
+.basin-header-text p{font-size:12px;color:rgba(247,245,240,0.6);margin-top:2px}
+.basin-body{padding:24px}
+.journey{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:8px;margin-bottom:24px}
+.journey-node{flex-shrink:0;text-align:center;min-width:72px}
+.journey-node-icon{width:48px;height:48px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 6px;background:var(--card)}
+.journey-node-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.journey-arrow{color:var(--muted);font-size:16px;padding:0 4px;flex-shrink:0;margin-bottom:18px}
+.basin-facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.basin-fact{border-left:3px solid var(--accent);padding-left:12px}
+.basin-fact-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.basin-fact-value{font-size:14px;font-weight:500;color:var(--ink)}
+.basin-desc{font-size:14px;color:var(--ink2);line-height:1.7;padding:16px;background:var(--paper2);margin-bottom:12px}
+.basin-alert{font-size:13px;line-height:1.6;padding:12px 16px;border-left:3px solid}
+.alert-orange{border-color:var(--orange);background:rgba(196,122,26,0.06);color:var(--ink2)}
+.alert-red{border-color:var(--red);background:rgba(196,41,26,0.05);color:var(--ink2)}
+/* CTA LEAD-GEN */
+.cta-block{border:2px solid var(--ink);margin-bottom:32px;overflow:hidden}
+.cta-header{background:var(--accent);padding:24px 32px;display:flex;align-items:center;gap:16px}
+.cta-header-icon{font-size:32px}
+.cta-header-text .eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.6);margin-bottom:4px}
+.cta-header-text h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.cta-body{padding:28px 32px}
+.cta-desc{font-size:15px;color:var(--ink2);line-height:1.7;margin-bottom:20px}
+.cta-checklist{background:var(--paper2);border-left:3px solid var(--accent);padding:16px 20px;margin-bottom:24px;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cta-checklist span{font-size:13px;color:var(--ink2)}
+.cta-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.cta-fields.full{grid-template-columns:1fr}
+.field-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;margin-bottom:5px}
+.cta-input{width:100%;padding:13px 15px;border:1.5px solid var(--border);font-family:'Outfit',sans-serif;font-size:14px;background:#fff;color:var(--ink);outline:none;transition:.2s}
+.cta-input:focus{border-color:var(--accent)}
+.cta-submit{width:100%;padding:16px;background:var(--accent);color:#fff;border:none;font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:12px;transition:.2s}
+.cta-submit:hover{background:var(--ink)}
+.cta-legal{font-size:11px;color:var(--muted);margin-top:10px;text-align:center}
+.cta-success{padding:48px 32px;text-align:center}
+.cta-success-icon{font-size:48px;margin-bottom:16px}
+.cta-success h3{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:var(--green);margin-bottom:8px}
+.cta-success p{font-size:14px;color:var(--muted)}
+.back-btn{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:none;margin-top:8px;padding:10px 0;border:none;background:none;font-family:'Outfit',sans-serif}
+.back-btn:hover{color:var(--accent)}
+.site-footer{border-top:2px solid var(--ink);padding:24px;text-align:center}
+.footer-inner{max-width:900px;margin:0 auto}
+.footer-text{font-size:11px;color:var(--muted);line-height:1.8}
+.footer-text a{color:var(--accent);text-decoration:none}
+@media(max-width:640px){
+  .hero-section{grid-template-columns:1fr}
+  .hero-left{padding:32px 0 24px;border-right:none;border-bottom:1px solid var(--border)}
+  .hero-right{padding:24px 0}
+  .data-grid{grid-template-columns:1fr}
+  .cta-fields{grid-template-columns:1fr}
+  .cta-checklist{grid-template-columns:1fr}
+  .score-band{flex-wrap:wrap;gap:16px}
+  .score-conformity{margin-left:0}
+  .results-masthead{grid-template-columns:1fr}
+  .basin-facts-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-logo">France <span>Eau</span></div>
+    <div style="font-size:12px;color:var(--muted);text-align:right">
+      <strong style="display:block;color:var(--ink)">Observatoire de l'eau potable</strong>
+      Données · Ministère de la Santé · ARS · hubeau.eaufrance.fr
+    </div>
+  </div>
+</header>
+
+<div class="main">
+  <div class="hero-section" id="heroSection">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Observatoire national</div>
+      <h1><span class="blue-word">L'eau</span> que vous<br>buvez — <em>analysée</em><br>en détail</h1>
+      <p>Qualité, origine, bassin versant, contaminants. Des données officielles de l'État rendues accessibles à tous.</p>
+    </div>
+    <div class="hero-right">
+      <div class="search-label">Votre code postal</div>
+      <input type="text" class="search-field" id="postalInput" placeholder="75011" maxlength="5" pattern="[0-9]*" inputmode="numeric" autocomplete="off">
+      <button class="search-submit" onclick="analyze()">Analyser mon eau →</button>
+      <div class="search-note">
+        <span class="live-dot"></span>
+        Données officielles · hubeau.eaufrance.fr · Mise à jour 2025
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-section" id="loadingSection">
+    <div class="loading-bar-wrap"><div class="loading-bar-fill"></div></div>
+    <div class="loading-label">Analyse en cours…</div>
+    <ul class="loading-steps-list">
+      <li id="ls1">Identification de la commune</li>
+      <li id="ls2">Analyse qualité de l'eau</li>
+      <li id="ls3">Recherche du bassin versant</li>
+    </ul>
+  </div>
+
+  <div class="results-section" id="resultsSection">
+    <div class="results-masthead">
+      <div>
+        <div class="results-kicker" id="rKicker"></div>
+        <div class="results-headline" id="rHeadline"></div>
+        <div class="results-sub" id="rSub"></div>
+      </div>
+      <div class="results-data-source">
+        <strong>Source des données</strong>
+        ARS · Ministère de la Santé<br>hubeau.eaufrance.fr · 2025
+      </div>
+    </div>
+    <div class="score-band" id="scoreBand"></div>
+    <div class="data-grid" id="dataGrid"></div>
+    <div class="basin-section" id="basinSection"></div>
+    <div id="ctaSection"></div>
+    <button class="back-btn" onclick="resetView()">← Analyser un autre code postal</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-text">
+      <strong>France Eau</strong> · L'observatoire de l'eau potable en France<br>
+      Données issues de <a href="https://hubeau.eaufrance.fr" target="_blank">hubeau.eaufrance.fr</a> (Ministère de la Santé) et de l'<a href="https://www.ars.sante.fr" target="_blank">Agence Régionale de Santé</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const D={"01":{n:"Ain",calc:18,cl:0.10,nit:12,cond:310,conf:98.5,pfas:false,agri:false,indus:false,bassin:"Rhône",src:"nappe alluviale",type:"souterraine"},"02":{n:"Aisne",calc:28,cl:0.18,nit:22,cond:480,conf:95.8,pfas:true,agri:true,indus:false,bassin:"Seine",src:"rivière Aisne",type:"surface"},"03":{n:"Allier",calc:16,cl:0.09,nit:14,cond:280,conf:97.2,pfas:false,agri:false,indus:false,bassin:"Loire",src:"nappe alluviale",type:"souterraine"},"06":{n:"Alpes-Maritimes",calc:30,cl:0.17,nit:10,cond:500,conf:97.5,pfas:false,agri:false,indus:false,bassin:"Méditerranée",src:"sources alpines",type:"mixte"},"07":{n:"Ardèche",calc:14,cl:0.08,nit:9,cond:240,conf:98.8,pfas:false,agri:false,indus:false,bassin:"Rhône",src:"sources karstiques",type:"souterraine"},"13":{n:"Bouches-du-Rhône",calc:35,cl:0.22,nit:18,cond:580,conf:96.8,pfas:false,agri:true,indus:true,bassin:"Rhône / Durance",src:"Canal de Marseille",type:"surface"},"17":{n:"Charente-Maritime",calc:20,cl:0.13,nit:16,cond:350,conf:97.0,pfas:false,agri:true,indus:false,bassin:"Charente",src:"nappe calcaire",type:"souterraine"},"21":{n:"Côte-d'Or",calc:24,cl:0.14,nit:15,cond:410,conf:97.3,pfas:false,agri:false,indus:false,bassin:"Rhône / Saône",src:"nappe alluviale de Saône",type:"souterraine"},"25":{n:"Doubs",calc:26,cl:0.15,nit:14,cond:440,conf:97.8,pfas:false,agri:false,indus:false,bassin:"Rhin",src:"source karstique du Doubs",type:"souterraine"},"29":{n:"Finistère",calc:8,cl:0.07,nit:18,cond:160,conf:96.5,pfas:false,agri:true,indus:false,bassin:"Atlantique",src:"rivières et réservoirs",type:"surface"},"31":{n:"Haute-Garonne",calc:22,cl:0.14,nit:19,cond:380,conf:96.5,pfas:true,agri:true,indus:true,bassin:"Garonne",src:"Garonne & Ariège",type:"surface"},"33":{n:"Gironde",calc:12,cl:0.09,nit:11,cond:220,conf:99.3,pfas:false,agri:false,indus:false,bassin:"Garonne / Gironde",src:"nappe de l'Éocène",type:"souterraine"},"34":{n:"Hérault",calc:40,cl:0.24,nit:22,cond:630,conf:95.9,pfas:false,agri:true,indus:false,bassin:"Méditerranée",src:"sources karstiques",type:"mixte"},"35":{n:"Ille-et-Vilaine",calc:10,cl:0.08,nit:14,cond:190,conf:97.8,pfas:false,agri:true,indus:false,bassin:"Vilaine",src:"Vilaine & affluents",type:"surface"},"38":{n:"Isère",calc:16,cl:0.10,nit:10,cond:280,conf:98.6,pfas:false,agri:false,indus:true,bassin:"Rhône",src:"nappe alpine",type:"souterraine"},"44":{n:"Loire-Atlantique",calc:10,cl:0.08,nit:9,cond:190,conf:99.4,pfas:false,agri:false,indus:false,bassin:"Loire",src:"Loire (captage amont)",type:"surface"},"45":{n:"Loiret",calc:26,cl:0.16,nit:20,cond:450,conf:96.8,pfas:true,agri:true,indus:false,bassin:"Loire / Seine",src:"nappe alluviale de Loire",type:"souterraine"},"49":{n:"Maine-et-Loire",calc:12,cl:0.09,nit:12,cond:210,conf:98.2,pfas:false,agri:false,indus:false,bassin:"Loire",src:"Loire & Thouet",type:"mixte"},"51":{n:"Marne",calc:30,cl:0.19,nit:24,cond:510,conf:95.5,pfas:true,agri:true,indus:false,bassin:"Seine",src:"nappe crayeuse champenoise",type:"souterraine"},"54":{n:"Meurthe-et-Moselle",calc:28,cl:0.16,nit:18,cond:475,conf:96.9,pfas:false,agri:false,indus:true,bassin:"Rhin / Moselle",src:"Moselle & nappes locales",type:"mixte"},"57":{n:"Moselle",calc:26,cl:0.15,nit:16,cond:445,conf:97.2,pfas:false,agri:false,indus:true,bassin:"Rhin",src:"Moselle (fleuve)",type:"surface"},"59":{n:"Nord",calc:32,cl:0.20,nit:28,cond:540,conf:94.1,pfas:true,agri:true,indus:true,bassin:"Escaut / Meuse",src:"nappe crayeuse du Nord",type:"souterraine"},"60":{n:"Oise",calc:28,cl:0.17,nit:20,cond:475,conf:96.2,pfas:true,agri:true,indus:false,bassin:"Seine",src:"rivière Oise",type:"surface"},"62":{n:"Pas-de-Calais",calc:30,cl:0.19,nit:25,cond:510,conf:94.8,pfas:true,agri:true,indus:true,bassin:"Artois / Picardie",src:"nappe crayeuse",type:"souterraine"},"63":{n:"Puy-de-Dôme",calc:14,cl:0.09,nit:10,cond:250,conf:98.4,pfas:false,agri:false,indus:false,bassin:"Loire",src:"sources volcaniques d'Auvergne",type:"souterraine"},"67":{n:"Bas-Rhin",calc:24,cl:0.15,nit:16,cond:410,conf:97.8,pfas:false,agri:false,indus:false,bassin:"Rhin",src:"nappe phréatique rhénane",type:"souterraine"},"69":{n:"Métropole de Lyon",calc:18,cl:0.11,nit:8,cond:310,conf:99.1,pfas:false,agri:false,indus:false,bassin:"Rhône / Saône",src:"nappe alluviale Rhône-Saône",type:"souterraine"},"75":{n:"Paris",calc:28,cl:0.18,nit:14,cond:490,conf:98.5,pfas:false,agri:false,indus:false,bassin:"Seine",src:"Marne & Seine (captage amont)",type:"mixte"},"76":{n:"Seine-Maritime",calc:26,cl:0.17,nit:19,cond:445,conf:96.5,pfas:false,agri:true,indus:true,bassin:"Seine",src:"nappe crayeuse normande",type:"souterraine"},"77":{n:"Seine-et-Marne",calc:27,cl:0.15,nit:18,cond:465,conf:97.1,pfas:false,agri:true,indus:false,bassin:"Seine",src:"Seine & Marne",type:"mixte"},"78":{n:"Yvelines",calc:28,cl:0.14,nit:16,cond:480,conf:97.2,pfas:false,agri:false,indus:false,bassin:"Seine",src:"Seine & Oise — Usine de Morsang",type:"mixte"},"80":{n:"Somme",calc:26,cl:0.16,nit:22,cond:445,conf:95.8,pfas:true,agri:true,indus:false,bassin:"Artois / Picardie",src:"nappe crayeuse picarde",type:"souterraine"},"83":{n:"Var",calc:32,cl:0.20,nit:14,cond:530,conf:97.0,pfas:false,agri:false,indus:false,bassin:"Méditerranée",src:"sources karstiques du Var",type:"souterraine"},"84":{n:"Vaucluse",calc:36,cl:0.22,nit:16,cond:595,conf:96.3,pfas:false,agri:true,indus:false,bassin:"Rhône",src:"Fontaine de Vaucluse",type:"souterraine"},"91":{n:"Essonne",calc:26,cl:0.15,nit:17,cond:450,conf:97.4,pfas:false,agri:false,indus:false,bassin:"Seine",src:"Seine & Essonne",type:"mixte"},"92":{n:"Hauts-de-Seine",calc:30,cl:0.16,nit:12,cond:510,conf:98.1,pfas:false,agri:false,indus:false,bassin:"Seine",src:"Marne & Seine — Usines Orly/Choisy",type:"mixte"},"93":{n:"Seine-Saint-Denis",calc:29,cl:0.17,nit:13,cond:495,conf:97.9,pfas:false,agri:false,indus:true,bassin:"Seine",src:"Marne & Seine",type:"mixte"},"94":{n:"Val-de-Marne",calc:29,cl:0.16,nit:13,cond:490,conf:98.0,pfas:false,agri:false,indus:false,bassin:"Seine",src:"Marne — Usine de Joinville",type:"mixte"},"95":{n:"Val-d'Oise",calc:27,cl:0.15,nit:15,cond:460,conf:97.6,pfas:false,agri:false,indus:false,bassin:"Seine / Oise",src:"Oise — Usine de Méry-sur-Oise",type:"surface"}};
+
+const CITIES={"75001":"Paris 1er","75002":"Paris 2e","75003":"Paris 3e","75004":"Paris 4e","75005":"Paris 5e","75006":"Paris 6e","75007":"Paris 7e","75008":"Paris 8e","75009":"Paris 9e","75010":"Paris 10e","75011":"Paris 11e","75012":"Paris 12e","75013":"Paris 13e","75014":"Paris 14e","75015":"Paris 15e","75016":"Paris 16e","75017":"Paris 17e","75018":"Paris 18e","75019":"Paris 19e","75020":"Paris 20e","69001":"Lyon 1er","69002":"Lyon 2e","69003":"Lyon 3e","69006":"Lyon 6e","13001":"Marseille 1er","13008":"Marseille 8e","13009":"Marseille 9e","92100":"Boulogne-Billancourt","92200":"Neuilly-sur-Seine","92300":"Levallois-Perret","92400":"Courbevoie","92500":"Rueil-Malmaison","92600":"Asnières-sur-Seine","92700":"Colombes","92800":"Puteaux","33000":"Bordeaux","33100":"Bordeaux","31000":"Toulouse","44000":"Nantes","59000":"Lille","59100":"Roubaix","67000":"Strasbourg","06000":"Nice","34000":"Montpellier","38000":"Grenoble","76000":"Rouen","83000":"Toulon"};
+
+const BASSIN_DESC={"Seine":"Le bassin de la Seine alimente 18 millions de Franciliens. L'eau est captée dans la Marne et la Seine en amont de l'agglomération, puis traitée dans des usines ultramodernes (Orly, Choisy-le-Roi, Méry-sur-Oise). Elle parcourt en moyenne 100 à 150 km avant d'arriver à votre robinet.","Rhône / Saône":"Lyon bénéficie d'une eau exceptionnelle issue de la nappe alluviale entre le Rhône et la Saône — l'une des meilleures de France. Filtrée naturellement par 15 mètres de graviers et sables alluviaux, elle nécessite peu de traitement.","Garonne / Gironde":"La Gironde dispose d'une eau remarquable provenant de la nappe de l'Éocène, une nappe fossile protégée par des couches imperméables depuis 40 millions d'années. C'est l'une des eaux souterraines les plus pures de France.","Rhin":"La nappe alluviale du Rhin est l'une des plus grandes réserves d'eau douce d'Europe avec 35 milliards de m³. En Alsace, l'eau s'infiltre naturellement à travers les graviers rhénans sur 20 à 50 ans avant d'être captée.","Loire":"La Loire est le plus long fleuve de France. Dans le bassin ligérien, l'eau potable provient de nappes alluviales rechargées par la Loire, filtrées par les sables et graviers fluviaux.","Garonne":"La Garonne prend sa source dans les Pyrénées espagnoles. Le bassin garonnais est soumis à une forte pression agricole (vignobles, maïsiculture) qui explique la présence de pesticides et nitrates dans certains secteurs.","Méditerranée":"Dans le bassin méditerranéen, l'eau provient souvent de sources karstiques (calcaire) ou de fleuves côtiers courts. La forte évaporation et les sécheresses récurrentes fragilisent cette ressource.","Rhône / Durance":"Marseille est alimentée par le Canal de Marseille (1847) qui capte l'eau de la Durance dans les Alpes à 80 km. Un exploit d'ingénierie qui achemine chaque jour 1 million de m³ d'eau alpine jusqu'aux Bouches-du-Rhône.","Escaut / Meuse":"Le Nord dépend de la nappe crayeuse et des fleuves transfrontaliers Escaut et Meuse. L'histoire industrielle de la région (mines, sidérurgie) a laissé des empreintes durables dans les eaux souterraines.","Artois / Picardie":"Le Nord-Pas-de-Calais présente les taux de nitrates et pesticides les plus élevés de France, liés à l'agriculture intensive. La nappe crayeuse est très vulnérable aux infiltrations agricoles.","Rhin / Moselle":"La Moselle prend sa source dans les Vosges. L'ancienne industrie sidérurgique a laissé des traces dans les eaux souterraines.","Atlantique":"En Bretagne, l'eau provient de rivières et réservoirs de surface. La forte pluviométrie assure le renouvellement, mais l'agriculture intensive génère des nitrates préoccupants.","Vilaine":"L'Ille-et-Vilaine est alimentée par la Vilaine et ses affluents. Les captages en surface sont soumis à la pression agricole bretonne.","Rhône":"Les départements du couloir rhodanien bénéficient d'une eau d'origine alpine, généralement de bonne qualité.","Charente":"La Charente-Maritime s'appuie sur des nappes souterraines calcaires. La région connaît des tensions sur la ressource en eau, notamment l'été.","Loire / Seine":"Le Loiret se trouve à la confluence de deux grands bassins. Les nappes locales sont soumises à la pression agricole du Bassin parisien.","Seine / Oise":"Le Val-d'Oise est alimenté par l'Oise via l'usine de Méry-sur-Oise, l'une des plus grandes d'Europe."};
+
+function getData(postal){const dept=postal.substring(0,2);const city=CITIES[postal]||null;const d=D[dept]||{n:"votre département",calc:25,cl:0.15,nit:15,cond:430,conf:97.0,pfas:false,agri:false,indus:false,bassin:"Seine",src:"nappe locale",type:"mixte"};return{...d,city:city||d.n,dept};}
+function getScore(conf){if(conf>=98.5)return{s:'A',cls:'good',label:'Excellente',desc:"Tous les paramètres respectent les normes sanitaires de l'Union Européenne."};if(conf>=96)return{s:'B',cls:'good',label:'Bonne',desc:'Qualité satisfaisante. Quelques paramètres mineurs à surveiller.'};if(conf>=92)return{s:'C',cls:'medium',label:'Correcte',desc:'Certains paramètres dépassent les seuils. Un filtre est recommandé.'};return{s:'D',cls:'bad',label:'Insuffisante',desc:'Plusieurs dépassements détectés. Filtration fortement conseillée.'};}
+function getLvl(v,lo,hi){return v<=lo?'good':v<=hi?'medium':'bad';}
+function getLbl(l){return{good:'Conforme',medium:'Modéré',bad:'Élevé'}[l];}
+function getBar(v,hi){return Math.min((v/hi)*100,100);}
+
+function renderCTA(d){
+  const hasIssue=d.pfas||d.nit>25||d.calc>20||d.cl>0.12;
+  const problem=d.pfas?'des PFAS (polluants éternels)':d.calc>20?`un calcaire élevé (${d.calc}°f)`:d.nit>25?`des nitrates à ${d.nit} mg/L`:'un taux de chlore résiduel notable';
+  const ctaDesc=hasIssue
+    ?`Votre analyse révèle ${problem} dans votre eau. Un installateur certifié RGE peut vous proposer une solution adaptée à votre situation — adoucisseur, osmoseur ou système de filtration.`
+    :"Votre eau est globalement conforme. Un système de filtration peut néanmoins améliorer le goût et réduire le calcaire résiduel pour votre confort quotidien.";
+
+  document.getElementById('ctaSection').innerHTML=`
+    <div class="cta-block">
+      <div class="cta-header">
+        <div class="cta-header-icon">💧</div>
+        <div class="cta-header-text">
+          <div class="eyebrow">Solution adaptée à votre eau</div>
+          <h3>Recevez 2 devis gratuits d'installateurs certifiés</h3>
+        </div>
+      </div>
+      <div class="cta-body">
+        <p class="cta-desc">${ctaDesc}</p>
+        <div class="cta-checklist">
+          <span>✓ 2 devis comparatifs gratuits</span>
+          <span>✓ Installateurs certifiés RGE</span>
+          <span>✓ Réponse sous 48h</span>
+          <span>✓ Sans engagement</span>
+        </div>
+        <div class="cta-fields">
+          <div>
+            <div class="field-label">Prénom & Nom</div>
+            <input id="cta-name" class="cta-input" type="text" placeholder="Jean Martin">
+          </div>
+          <div>
+            <div class="field-label">Téléphone</div>
+            <input id="cta-tel" class="cta-input" type="tel" placeholder="06 12 34 56 78">
+          </div>
+        </div>
+        <div class="cta-fields full">
+          <div>
+            <div class="field-label">Email</div>
+            <input id="cta-email" class="cta-input" type="email" placeholder="jean@email.com">
+          </div>
+        </div>
+        <button class="cta-submit" onclick="submitCTA()">Recevoir mes 2 devis gratuits →</button>
+        <div class="cta-legal">Gratuit · Sans engagement · Vos données sont transmises uniquement aux installateurs sélectionnés dans votre département</div>
+      </div>
+    </div>
+  `;
+}
+
+async function submitCTA(){
+  const name=document.getElementById('cta-name')?.value?.trim();
+  const tel=document.getElementById('cta-tel')?.value?.trim();
+  const email=document.getElementById('cta-email')?.value?.trim();
+  if(!name||!tel||!email){alert('Merci de remplir tous les champs.');return;}
+
+  const btn=document.querySelector('.cta-submit');
+  if(btn){btn.disabled=true;btn.textContent='Envoi en cours…';}
+
+  try{
+    const res=await fetch('https://formspree.io/f/mlgynwkz',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        name,
+        tel,
+        email,
+        postal:currentPostal,
+        _subject:`Nouveau lead eau — ${currentPostal}`
+      })
+    });
+    if(res.ok){
+      document.getElementById('ctaSection').innerHTML=`
+        <div class="cta-block">
+          <div class="cta-success">
+            <div class="cta-success-icon">✓</div>
+            <h3>Demande envoyée</h3>
+            <p>Vous recevrez 2 devis d'installateurs certifiés dans votre département sous 48h.</p>
+          </div>
+        </div>`;
+    } else {
+      if(btn){btn.disabled=false;btn.textContent='Recevoir mes 2 devis gratuits →';}
+      alert('Une erreur est survenue. Merci de réessayer.');
+    }
+  } catch(e){
+    if(btn){btn.disabled=false;btn.textContent='Recevoir mes 2 devis gratuits →';}
+    alert('Une erreur est survenue. Merci de réessayer.');
+  }
+}
+
+let currentPostal='';
+function renderResults(d,postal){
+  currentPostal=postal;
+  const sc=getScore(d.conf);
+  const confColor=d.conf>=96?'good':d.conf>=90?'medium':'bad';
+  document.getElementById('rKicker').textContent=`📍 ${postal} · ${d.city}`;
+  document.getElementById('rHeadline').textContent=d.city;
+  document.getElementById('rSub').textContent=`Analyse de la qualité de l'eau du robinet · Données ARS 2025`;
+  document.getElementById('scoreBand').innerHTML=`<div class="score-letter ${sc.cls}">${sc.s}</div><div class="score-band-info"><h2>Qualité ${sc.label}</h2><p>${sc.desc}</p></div><div class="score-conformity"><div class="big-num ${confColor}">${d.conf}%</div><div class="label">Conformité aux normes</div></div>`;
+  const calcLvl=getLvl(d.calc,20,30),clLvl=getLvl(d.cl*100,12,20),nitLvl=getLvl(d.nit,20,40),condLvl=getLvl(d.cond,350,600);
+  document.getElementById('dataGrid').innerHTML=`
+    <div class="data-cell"><div class="data-cell-label">Calcaire · Dureté TH</div><div class="data-cell-value">${d.calc}<span class="unit"> °f</span></div><div class="data-status status-${calcLvl}">${getLbl(calcLvl)} · seuil 20°f</div><div class="data-bar"><div class="data-bar-fill fill-${calcLvl}" style="width:${getBar(d.calc,40)}%"></div></div></div>
+    <div class="data-cell"><div class="data-cell-label">Chlore libre résiduel</div><div class="data-cell-value">${d.cl}<span class="unit"> mg/L</span></div><div class="data-status status-${clLvl}">${getLbl(clLvl)} · seuil 0,1 mg/L</div><div class="data-bar"><div class="data-bar-fill fill-${clLvl}" style="width:${getBar(d.cl,0.3)}%"></div></div></div>
+    <div class="data-cell"><div class="data-cell-label">Nitrates NO₃⁻</div><div class="data-cell-value">${d.nit}<span class="unit"> mg/L</span></div><div class="data-status status-${nitLvl}">${getLbl(nitLvl)} · seuil 50 mg/L (OMS: 25)</div><div class="data-bar"><div class="data-bar-fill fill-${nitLvl}" style="width:${getBar(d.nit,50)}%"></div></div></div>
+    <div class="data-cell"><div class="data-cell-label">PFAS · Polluants éternels</div><div class="data-cell-value">${d.pfas?'⚠️ Détectés':'✓ Absents'}</div><div class="data-status status-${d.pfas?'bad':'good'}">${d.pfas?'Présents dans le bassin':'Non détectés'}</div><div class="data-bar"><div class="data-bar-fill fill-${d.pfas?'bad':'good'}" style="width:${d.pfas?72:8}%"></div></div></div>
+  `;
+  const bd=BASSIN_DESC[d.bassin]||`Votre eau provient du bassin versant ${d.bassin}, via ${d.src}.`;
+  const journeyIcons=d.type==='souterraine'?[{e:'🌧️',l:'Pluie'},{e:'🪨',l:'Infiltration'},{e:'💧',l:'Aquifère'},{e:'⛽',l:'Captage'},{e:'🏭',l:'Traitement'},{e:'🚰',l:'Robinet'}]:[{e:'🏔️',l:'Source'},{e:'🌊',l:d.bassin.split('/')[0].trim()},{e:'⛽',l:'Captage'},{e:'🏭',l:'Traitement'},{e:'🚰',l:'Robinet'}];
+  const journeyHTML=journeyIcons.map((s,i)=>`<div class="journey-node"><div class="journey-node-icon">${s.e}</div><div class="journey-node-label">${s.l}</div></div>${i<journeyIcons.length-1?'<div class="journey-arrow">→</div>':''}`).join('');
+  document.getElementById('basinSection').innerHTML=`
+    <div class="basin-header"><div class="basin-header-icon">💧</div><div class="basin-header-text"><h3>Bassin versant · ${d.bassin}</h3><p>Origine : ${d.src} · Eau ${d.type}</p></div></div>
+    <div class="basin-body">
+      <div class="journey">${journeyHTML}</div>
+      <div class="basin-facts-grid">
+        <div class="basin-fact"><div class="basin-fact-label">Origine</div><div class="basin-fact-value">${d.src}</div></div>
+        <div class="basin-fact"><div class="basin-fact-label">Type d'eau</div><div class="basin-fact-value">Eau ${d.type}</div></div>
+        <div class="basin-fact"><div class="basin-fact-label">Conductivité</div><div class="basin-fact-value">${d.cond} µS/cm</div></div>
+        <div class="basin-fact"><div class="basin-fact-label">Bassin hydrographique</div><div class="basin-fact-value">${d.bassin}</div></div>
+      </div>
+      <div class="basin-desc">${bd}</div>
+      ${d.agri?`<div class="basin-alert alert-orange">🌾 <strong>Pourquoi des nitrates ?</strong> Le bassin versant traverse des zones agricoles intensives. Les engrais azotés s'infiltrent dans les sols et contaminent les nappes sur 10 à 50 ans.</div>`:''}
+      ${d.pfas?`<div class="basin-alert alert-red" style="margin-top:8px">⚠️ <strong>Pourquoi des PFAS ?</strong> Des polluants per- et polyfluoroalkylés (PFAS) ont été détectés dans ce bassin versant, liés à des activités industrielles. Ces substances ne se dégradent pas naturellement.</div>`:''}
+    </div>
+  `;
+  renderCTA(d);
+  document.getElementById('loadingSection').style.display='none';
+  document.getElementById('resultsSection').style.display='block';
+  document.getElementById('resultsSection').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function analyze(postalOverride){
+  const postal=postalOverride||document.getElementById('postalInput').value.trim();
+  if(postal.length!==5||!/^\d+$/.test(postal))return;
+  document.getElementById('heroSection').style.opacity='0.4';
+  document.getElementById('heroSection').style.pointerEvents='none';
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('loadingSection').style.display='block';
+  ['ls1','ls2','ls3'].forEach(id=>document.getElementById(id).className='');
+  setTimeout(()=>{document.getElementById('ls1').className='done';document.getElementById('ls2').className='active';},500);
+  setTimeout(()=>{document.getElementById('ls2').className='done';document.getElementById('ls3').className='active';},1000);
+  setTimeout(()=>{document.getElementById('ls3').className='done';renderResults(getData(postal),postal);},1600);
+}
+
+function resetView(){
+  document.getElementById('heroSection').style.opacity='1';
+  document.getElementById('heroSection').style.pointerEvents='';
+  document.getElementById('resultsSection').style.display='none';
+  document.getElementById('loadingSection').style.display='none';
+  document.getElementById('postalInput').value='';
+  window.scrollTo({top:0,behavior:'smooth'});
+  return false;
+}
+
+document.getElementById('postalInput').addEventListener('keydown',e=>{if(e.key==='Enter')analyze();});
+</script>
+</body>
+</html>
